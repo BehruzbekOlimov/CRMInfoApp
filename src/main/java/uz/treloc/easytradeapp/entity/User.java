@@ -2,18 +2,14 @@ package uz.treloc.easytradeapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.treloc.easytradeapp.entity.enums.Role;
 import uz.treloc.easytradeapp.entity.template.RootEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Collections;
 
 @Table(name = "users")
 @Entity
@@ -27,18 +23,21 @@ public class User extends RootEntity implements UserDetails {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @JsonIgnore
     @Column(nullable = false)
     private String password;
 
-    private Boolean enabled=true;
+    private Boolean enabled = true;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(role);
     }
 
     @Override
