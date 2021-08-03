@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uz.treloc.easytradeapp.config.jwt.JwtUtils;
 import uz.treloc.easytradeapp.entity.User;
 import uz.treloc.easytradeapp.entity.enums.Role;
+import uz.treloc.easytradeapp.payload.request.UserAuthRequest;
 import uz.treloc.easytradeapp.payload.request.UserRegisterRequest;
 import uz.treloc.easytradeapp.payload.response.UserWithJwtResponse;
 import uz.treloc.easytradeapp.repository.UserRepository;
@@ -37,7 +38,7 @@ public class AuthService implements UserDetailsService {
     public UserWithJwtResponse register(UserRegisterRequest req) {
         User user = new User();
         user.setName(req.getName());
-        user.setUsername(req.getUsername());
+        user.setUsername(req.getUsername().trim());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setRole(Role.USER);
 
@@ -45,6 +46,25 @@ public class AuthService implements UserDetailsService {
         String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        return new UserWithJwtResponse(
+                user,
+                jwt
+        );
+    }
+
+    public UserWithJwtResponse auth(UserAuthRequest req) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(req.getUsername().trim(), req.getPassword().trim());
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        User user = userRepository.findByUsername(req.getUsername().trim())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getUsername());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 

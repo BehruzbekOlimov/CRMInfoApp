@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uz.treloc.easytradeapp.payload.request.UserAuthRequest;
 import uz.treloc.easytradeapp.payload.request.UserRegisterRequest;
 import uz.treloc.easytradeapp.payload.response.UserWithJwtResponse;
 import uz.treloc.easytradeapp.service.AuthService;
@@ -18,9 +19,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("save")
-    UserWithJwtResponse save(@Valid @RequestBody UserRegisterRequest req) {
+    @PostMapping("register")
+    UserWithJwtResponse register(@Valid @RequestBody UserRegisterRequest req) {
         return authService.register(req);
+    }
+
+    @PostMapping("signIn")
+    UserWithJwtResponse register(@Valid @RequestBody UserAuthRequest req) {
+        return authService.auth(req);
     }
 
 }
