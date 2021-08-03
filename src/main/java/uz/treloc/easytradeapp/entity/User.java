@@ -33,7 +33,7 @@ public class User extends RootEntity implements UserDetails {
     private Boolean enabled = true;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -11,7 +11,9 @@ public class JwtUtils {
     @Value("${app.jwt.secretKey}")
     private String secretKey;
 
-    @Value("&{app.jwt.expiredDate}")
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String TOKEN_HEADER = "Authorization";
+    @Value("${app.jwt.expiredDate}")
     private Long expiredDate;
 
     public String generateToken(String username) {

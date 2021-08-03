@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uz.treloc</groupId>
-    <artifactId>EasyTradeApp</artifactId>
+    <artifactId>spring-security-starter</artifactId>
     <version>1.0</version>
-    <name>EasyTradeApp</name>
-    <description>EasyTradeApp</description>
+    <name>spring-security-starter</name>
+    <description>spring-security-starter</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>

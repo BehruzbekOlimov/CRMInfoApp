@@ -22,9 +22,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        if (!request.getHeader("Authorization").isEmpty()) {
-            String token = request.getHeader("Authorization").trim().substring(7);// "Bearer ".length = 7
+        if (request.getHeader(JwtUtils.TOKEN_HEADER) != null && request.getHeader(JwtUtils.TOKEN_HEADER).trim().length() > 7) {
+            String token = request.getHeader(JwtUtils.TOKEN_HEADER).trim().substring(JwtUtils.TOKEN_PREFIX.length());
             if (jwtUtils.validateToken(token)) {
                 User user = (User) authService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
