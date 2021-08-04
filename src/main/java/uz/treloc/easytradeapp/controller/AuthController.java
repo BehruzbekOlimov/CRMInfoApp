@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("signIn")
-    UserWithJwtResponse register(@Valid @RequestBody UserAuthRequest req) {
+    UserWithJwtResponse signIn(@Valid @RequestBody UserAuthRequest req) {
         return authService.auth(req);
     }
 

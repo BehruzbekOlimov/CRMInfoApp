@@ -1,10 +1,10 @@
 package uz.treloc.easytradeapp.config.jwt;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.treloc.easytradeapp.service.AuthService;
 
@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+    @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
     private AuthService authService;
 
     @Override
@@ -25,9 +25,12 @@ public class JwtFilter extends OncePerRequestFilter {
         if (request.getHeader(JwtUtils.TOKEN_HEADER) != null && request.getHeader(JwtUtils.TOKEN_HEADER).trim().length() > 7) {
             String token = request.getHeader(JwtUtils.TOKEN_HEADER).trim().substring(JwtUtils.TOKEN_PREFIX.length());
             if (jwtUtils.validateToken(token)) {
-                User user = (User) authService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+                UserDetails user = authService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                System.out.println(SecurityContextHolder.getContext().getAuthentication());
             }
         }
         filterChain.doFilter(request, response);

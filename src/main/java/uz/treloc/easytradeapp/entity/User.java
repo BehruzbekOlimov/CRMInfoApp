@@ -3,6 +3,7 @@ package uz.treloc.easytradeapp.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.treloc.easytradeapp.entity.enums.Role;
 import uz.treloc.easytradeapp.entity.template.RootEntity;
@@ -37,7 +38,8 @@ public class User extends RootEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(role);
+        SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(grantedAuthority);
     }
 
     @Override
