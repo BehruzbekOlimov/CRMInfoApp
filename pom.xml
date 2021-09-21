@@ -8,8 +8,8 @@
         <version>2.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>uz.treloc</groupId>
-    <artifactId>spring-security-starter</artifactId>
+    <groupId>uz.uzpartner.infoapp</groupId>
+    <artifactId>uzpartner-cargo-infoapp</artifactId>
     <version>1.0</version>
     <name>spring-security-starter</name>
     <description>spring-security-starter</description>
