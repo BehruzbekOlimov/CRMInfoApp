@@ -19,8 +19,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring security starter")
-                .description("Authentication with jwt")
+                .title("Uzpartner Info")
+                .description("Uzpartner cargo info application")
                 .contact(new Contact("Olimov Behruzbek", "https://github.com/BehruzbekOlimov", "olimovbehruzbek@gmail.com"))
                 .version("1.0")
                 .build();
