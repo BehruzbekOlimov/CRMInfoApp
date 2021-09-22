@@ -31,11 +31,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 User user = userRepository.findByEmail(jwtUtils.getEmailFromToken(token)).orElseThrow(() -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
+                if (user != null && user.isEnabled()) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             }
         }
         filterChain.doFilter(request, response);

@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.uzpartner.infoapp.config.jwt.JwtFilter;
+import uz.uzpartner.infoapp.entity.enums.Role;
 import uz.uzpartner.infoapp.service.UDService;
 
 @Configuration
@@ -45,6 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

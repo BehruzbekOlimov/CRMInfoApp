@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
@@ -28,23 +30,30 @@ public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         body.put("errors", errors);
-        body.put("status", 400);
+        body.put("status", status.value());
         body.put("message", "Bad request");
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-//        Map<String, String> errors = new HashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//
-//        return errors;
-//    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleBadRequestException(ResponseStatusException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", ex.getReason());
+        body.put("status", ex.getRawStatusCode());
+        body.put("message", "Bad request");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleNotFoundException(ResponseStatusException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", ex.getReason());
+        body.put("status", ex.getRawStatusCode());
+        body.put("message", "Bad request");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 
 }
