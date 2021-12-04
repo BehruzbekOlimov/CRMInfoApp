@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .antMatchers( "/api/test/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
                 .antMatchers(HttpMethod.PATCH, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
