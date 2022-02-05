@@ -21,8 +21,8 @@ public class UserUpdateRequest {
     private String lastName;
 
     @NotBlank
-    @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
-    private String email;
+    @Size(min = 4, max = 64, message = "username size must be between 4 and 32")
+    private String username;
 
     @NotBlank
 //    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?(\\d{2,3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$", message = "phone number not valid!")

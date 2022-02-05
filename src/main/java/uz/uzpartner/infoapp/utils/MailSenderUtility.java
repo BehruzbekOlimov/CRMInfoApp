@@ -1,21 +1,19 @@
 package uz.uzpartner.infoapp.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MailSenderUtil {
+public class MailSenderUtility {
 
     @Value("${spring.mail.username}")
     private String from;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
-    public MailSenderUtil(JavaMailSender javaMailSender) {
+    public MailSenderUtility(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 

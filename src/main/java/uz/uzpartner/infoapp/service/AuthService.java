@@ -29,7 +29,9 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     public UserWithJwtResponse register(UserRegisterRequest req) {
-        User match = userRepository.findByEmail(req.getEmail().toLowerCase().trim()).orElse(null);
+        if (req.getUsername().toLowerCase().trim().length() < 4)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        User match = userRepository.findByUsername(req.getUsername().toLowerCase().trim()).orElse(null);
         if (match != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "this email already exists");
         }
@@ -41,14 +43,14 @@ public class AuthService {
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
         user.setPhoneNumber(req.getPhoneNumber());
-        user.setEmail(req.getEmail().toLowerCase().trim());
+        user.setUsername(req.getUsername().toLowerCase().trim());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
-        user.setRole(Role.CUSTOMER);
+        user.setRole(Role.GUEST);
 
         user = userRepository.save(user);
-        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getEmail());
+        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
@@ -68,13 +70,15 @@ public class AuthService {
     }
 
     public UserWithJwtResponse update(UserUpdateRequest req) {
-        req.setEmail(req.getEmail().toLowerCase().trim());
+        req.setUsername(req.getUsername().toLowerCase().trim());
+        if (req.getUsername().length() < 4)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         User user = getMe();
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
         }
-        if (!Objects.equals(user.getEmail(), req.getEmail())) {
-            User match = userRepository.findByEmail(req.getEmail()).orElse(null);
+        if (!Objects.equals(user.getUsername(), req.getUsername())) {
+            User match = userRepository.findByUsername(req.getUsername()).orElse(null);
             if (match != null)
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "current email already exists");
         }
@@ -86,7 +90,7 @@ public class AuthService {
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
         user.setPhoneNumber(req.getPhoneNumber());
-        user.setEmail(req.getEmail());
+        user.setUsername(req.getUsername());
         if (req.getPassword() != null && req.getNewPassword() != null) {
             if (!passwordEncoder.matches(req.getPassword(), user.getPassword()))
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "incorrect password");
@@ -95,9 +99,9 @@ public class AuthService {
         }
 
         user = userRepository.save(user);
-        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getEmail());
+        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
@@ -109,16 +113,16 @@ public class AuthService {
 
     public UserWithJwtResponse auth(UserAuthRequest req) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(req.getEmail().toLowerCase().trim(), req.getPassword());
+                new UsernamePasswordAuthenticationToken(req.getUsername().toLowerCase().trim(), req.getPassword());
 
-        User user = userRepository.findByEmail(req.getEmail().toLowerCase().trim())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "email or password incorrect"));
+        User user = userRepository.findByUsername(req.getUsername().toLowerCase().trim())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "username or password incorrect"));
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "email or password incorrect");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "username or password incorrect");
         }
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getEmail());
+        String jwt = JwtUtils.TOKEN_PREFIX + jwtUtils.generateToken(user.getUsername());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import uz.uzpartner.infoapp.utils.MailSenderUtility;
 
 @RestController
-@RequestMapping("/api/test/")
+@RequestMapping("/api/telegram/")
 @AllArgsConstructor
-public class TestController {
+public class TelegramBotController {
     private final MailSenderUtility mailSenderUtility;
 
     @GetMapping("send-mail")

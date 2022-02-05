@@ -45,15 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui/**",
                         "/webjars/**")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                .antMatchers( "/api/test/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.PATCH, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/api/company/**").hasAnyAuthority(Role.MODERATOR.name())
-                .antMatchers(HttpMethod.POST, "/api/company/**").hasAnyAuthority(Role.MODERATOR.name())
-                .antMatchers(HttpMethod.PUT, "/api/company/**").hasAnyAuthority(Role.MODERATOR.name())
+                .antMatchers(HttpMethod.POST, "/api/auth/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/**").hasAnyAuthority(Role.ADMIN.name(),Role.MODERATOR.name(),Role.OPERATOR.name())
+                .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/auth/**").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name(),Role.MODERATOR.name())
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

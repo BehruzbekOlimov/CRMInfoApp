@@ -17,12 +17,6 @@ public class UserManagementController {
 
     private final UserManagementService userManagementService;
 
-    @PatchMapping("set-company/{id}")
-    ResponseEntity<?> setCompany(@PathVariable UUID id, @RequestParam UUID companyId) {
-
-        return ResponseEntity.status(203).body(userManagementService.setCompany(id, companyId));
-    }
-
     @PatchMapping("set-enabled/{id}")
     ResponseEntity<?> setEnabled(@PathVariable UUID id) {
         return ResponseEntity.status(200).body(userManagementService.setEnabled(id));

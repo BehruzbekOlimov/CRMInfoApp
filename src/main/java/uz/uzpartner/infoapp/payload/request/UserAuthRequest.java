@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserAuthRequest {
     @NotBlank
-    @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
-    private String email;
+    @Size(min = 4, max = 64, message = "username size must be between 4 and 32")
+    private String username;
 
     @NotBlank
     @Size(min = 6, message = "Password min size 6")

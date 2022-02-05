@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = request.getHeader(JwtUtils.TOKEN_HEADER).trim().substring(JwtUtils.TOKEN_PREFIX.length());
 
             if (jwtUtils.validateToken(token)) {
-                User user = userRepository.findByEmail(jwtUtils.getEmailFromToken(token)).orElseThrow(() -> {
+                User user = userRepository.findByUsername(jwtUtils.getEmailFromToken(token)).orElseThrow(() -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
                 if (user != null && user.isEnabled()) {
