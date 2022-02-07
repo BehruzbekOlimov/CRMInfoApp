@@ -13,5 +13,4 @@ public class SendPhoto {
     private String photo;
     private String caption;
     private ReplyKeyboard reply_markup;
-
 }

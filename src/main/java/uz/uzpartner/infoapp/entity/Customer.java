@@ -1,17 +1,12 @@
 package uz.uzpartner.infoapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import uz.uzpartner.infoapp.entity.enums.Role;
 import uz.uzpartner.infoapp.entity.template.RootEntity;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
@@ -29,10 +24,10 @@ public class Customer extends RootEntity {
     @Column(length = 32)
     private String lastName;
 
-    @Column(length = 64)
+    @Column(length = 64, unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false,length = 32)
+    @Column(nullable = false, length = 32)
     private String phoneNumber;
 
     private Boolean enabled = true;

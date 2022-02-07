@@ -1,5 +1,6 @@
 package uz.uzpartner.infoapp.service.template;
 
+import uz.uzpartner.infoapp.payload.request.PageAttributes;
 import uz.uzpartner.infoapp.payload.response.PageableResponse;
 
 public interface SimpleCrud<E, I, R> {
@@ -9,5 +10,5 @@ public interface SimpleCrud<E, I, R> {
 
     E getOne(I id);
 
-    PageableResponse<E> getAll();
+    PageableResponse<E> getAll(PageAttributes attributes);
 }

@@ -20,7 +20,7 @@ import java.util.Objects;
 @ToString
 @Entity
 public class Shipping extends RootEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 64)
     String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +34,7 @@ public class Shipping extends RootEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    TypeShipping type;
+    TypeShipping type = TypeShipping.CARRIAGE;
 
     @Enumerated(EnumType.STRING)
     ShippingStatus status = ShippingStatus.IN_THE_WAREHOUSE;

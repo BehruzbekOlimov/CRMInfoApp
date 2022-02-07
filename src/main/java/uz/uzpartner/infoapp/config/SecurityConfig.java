@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/auth/**").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/api/user-management/**").hasAnyAuthority(Role.ADMIN.name(),Role.MODERATOR.name())
+                .antMatchers(HttpMethod.POST, "/api/shipping/**").hasAnyAuthority(Role.MODERATOR.name(),Role.OPERATOR.name())
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

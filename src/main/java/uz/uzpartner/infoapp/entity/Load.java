@@ -23,14 +23,19 @@ public class Load extends RootEntity {
     @Column(nullable = false)
     String additionalInformation;
 
+    @Column(nullable = false, length = 64)
+    String name;
+
     @Column(nullable = false)
     Boolean notification = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     @ToString.Exclude
     Customer owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     @ToString.Exclude
     Shipping shipping;
 
